@@ -183,10 +183,6 @@ void Game::on_key_pressed(int key)
         case KEY_SELECT:
             reset();
         break;
-        case KEY_START:
-            if (!paused) return;
-            start();
-        break;
         case KEY_RESET:
             if (!is_running) return;
             reset();
@@ -196,29 +192,9 @@ void Game::on_key_pressed(int key)
             scenario->snake.set_direction(LEFT);
             key_pressed = true;
         break;
-        case KEY_UP:
-            if (!is_running && !is_game_over)
-            {
-                level--;
-                if (level < 1) level = 4;
-            }
-            if (!is_running || key_pressed) return;
-            scenario->snake.set_direction(UP);
-            key_pressed = true;
-        break;
         case KEY_RIGHT:
             if (!is_running || key_pressed) return;
             scenario->snake.set_direction(RIGHT);
-            key_pressed = true;
-        break;
-        case KEY_DOWN:
-            if (!is_running && !is_game_over)
-            {
-                level++;
-                if (level > 4) level = 1;
-            }
-            if (!is_running || key_pressed) return;
-            scenario->snake.set_direction(DOWN);
             key_pressed = true;
         break;
         default:

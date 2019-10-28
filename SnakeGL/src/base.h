@@ -30,7 +30,6 @@ using namespace std;
 /* Key mappings. */
 #define KEY_CAMERA      32  // space
 #define KEY_SELECT      13  // enter
-#define KEY_START       115 // s
 #define KEY_RESET       114 // r
 #define KEY_UP          GLUT_KEY_UP
 #define KEY_DOWN        GLUT_KEY_DOWN
@@ -41,8 +40,6 @@ GLuint textures[TEXTURE_COUNT];
 
 enum Direction
 {
-    DOWN  = 1,
-    UP    = 2,
     LEFT  = 3,
     RIGHT = 4,
 };

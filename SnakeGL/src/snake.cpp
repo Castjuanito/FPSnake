@@ -27,8 +27,7 @@ void Snake::move()
 
 void Snake::set_direction(int d)
 {
-    if ((d == DOWN && direction == UP) ||
-        (direction == DOWN && d == UP) ||
+    if (
         (d == LEFT && direction == RIGHT) ||
         (direction == LEFT && d == RIGHT))
     {
@@ -83,12 +82,6 @@ void Snake::grow(bool back)
 
     switch (direction)
     {
-        case DOWN:
-            p.z += 0.5f;
-        break;
-        case UP:
-            p.z -= 0.5f;
-        break;
         case LEFT:
             p.x -= 0.5f;
         break;
