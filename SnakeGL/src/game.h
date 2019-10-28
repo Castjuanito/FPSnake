@@ -12,7 +12,6 @@ class Game
 private:
     bool      is_game_over;
     bool      is_running;
-    bool      paused;
     bool      ate;
     bool      key_pressed;
     int       m, m2;

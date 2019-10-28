@@ -60,7 +60,7 @@ void Game::display()
 {
     int old_cam = scenario->camera_mode;
 
-    scenario->camera_mode = 3;
+    scenario->camera_mode = 1;
     scenario->set_camera();
 
     calculateFPS();
@@ -105,7 +105,7 @@ void Game::display()
         glColor3f(0.0f, 0.0f, 0.0f);
         glRectf(0,0, 0.75f, -0.1f);
 
-        scenario->camera_mode = 3;
+        scenario->camera_mode = 1;
         scenario->set_camera();
 
         if (clock())
@@ -120,11 +120,11 @@ void Game::display()
                 p.x = -1.25f;
                 p.y = 0.5f;
                 p.z = 0.15f;
-                draw_text("GAME OVER", p, 0.0f, 0.0f, 0.0f);
+                draw_text("Perdiste", p, 0.0f, 0.0f, 0.0f);
             }
         }
 
-        sprintf(s, "SCORE: %d", score * 10);
+        sprintf(s, "PUNTAJE: %d", score * 2);
 
         p.x = -1.0f;
         p.y = 0.5f;
@@ -183,10 +183,6 @@ void Game::on_key_pressed(int key)
         case KEY_SELECT:
             reset();
         break;
-        case KEY_RESET:
-            if (!is_running) return;
-            reset();
-        break;
         case KEY_LEFT:
             if (!is_running || key_pressed) return;
             scenario->snake.set_direction(LEFT);
@@ -198,7 +194,6 @@ void Game::on_key_pressed(int key)
             key_pressed = true;
         break;
         default:
-            cout << "key = " << key << "\n";
         break;
     }
 }

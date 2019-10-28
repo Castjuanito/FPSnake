@@ -1,4 +1,5 @@
 #include "snake.h"
+
 Snake::Snake()
 {
 }
@@ -28,8 +29,7 @@ void Snake::move()
 void Snake::set_direction(int d)
 {
     if (
-        (d == LEFT && direction == RIGHT) ||
-        (direction == LEFT && d == RIGHT))
+        (d == LEFT && direction == RIGHT) || (direction == LEFT && d == RIGHT))
     {
         return;
     }
@@ -39,6 +39,9 @@ void Snake::set_direction(int d)
 
 void Snake::draw()
 {
+    // TODO: Draw cylindric snake.
+    // It's more hard.
+    // Use glut2Cylinder. 
     Point h = points[0];
 
     glColor3f(1.0, 1.0, 0.6);
