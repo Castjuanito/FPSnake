@@ -14,6 +14,7 @@ public:
     void avanzar();
     void cambiar_direccion(int d);
     void draw();
+    void reset();
     void crecer(bool cola);
     void encogerce();
     bool estrellado(Punto p);

@@ -39,6 +39,7 @@ public:
     void pause();
     void start();
     void stop();
+    void reset();
     void on_key_pressed(int key);
 };
 

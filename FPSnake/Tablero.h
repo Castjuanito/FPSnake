@@ -13,7 +13,7 @@ private:
     void draw_paredes();
     void draw_comida();
     void draw_obstaculos();
-    //void draw_background();
+
 public:
     int camera_mode;
     float m;
@@ -25,9 +25,10 @@ public:
     void draw_board();
     void draw_objects();
     void draw_axis();
+    void draw_guide();
     void cambiar_camara();
     void set_camera();
-    //void reset();
+    void reset();
     Objeto estrellado(Punto p);
 };
 

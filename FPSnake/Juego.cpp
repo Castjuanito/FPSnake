@@ -18,7 +18,7 @@ Juego::Juego()
     juego_corriendo = false;
     pausado = false;
 
-    nivel = 3;
+    nivel = 2;
 
     m = to_fps(fps, 30);
     m2 = to_fps(fps, 10);
@@ -54,6 +54,15 @@ void Juego::stop()
 }
 
 
+
+void Juego::draw_menu()
+{
+  Punto p;
+  p.x = -2.3f;
+  p.y = 0.5f;
+  p.z = -3.5f;
+  draw_text("PRESIONE ENTER", p, 0.3f, 0.0f, 1.0f);
+}
 
 
 void Juego::display()
@@ -116,17 +125,17 @@ void Juego::display()
             }
         }
 
-        sprintf(s, "puntaje: %d", puntaje * 10);
+        sprintf(s, "Puntaje: %d", puntaje * 10);
 
         p.x = -1.0f;
-        p.y = 0.5f;
+        p.y = 9.5f;
         p.z = -7.0f;
 
         if (comer)
         {
             if (wait2())
             {
-                draw_text(s, p, 0.0f, 0.0f, 0.0f);
+                draw_text(s, p, 0.0f, 0.0f, -10.0f);
             }
         }
         else
@@ -136,8 +145,29 @@ void Juego::display()
 
     }
 
+    else
+    {
+      draw_menu();
+    }
+
 
     tablero->camera_mode = old_cam;
+}
+
+void Juego::reset()
+{
+    m = to_fps(fps, 30);
+    m2 = to_fps(fps, 10);
+
+    puntaje = 0;
+    comer = false;
+    pausado = false;
+
+    tick = 30;
+    tick2 = 10;
+
+    tablero->reset();
+    juego_corriendo = true;
 }
 
 void Juego::run()
@@ -169,7 +199,7 @@ void Juego::run()
         case OBSTACULO:
         case PARED:
         case SERPINTE:
-            tablero->serpiente.encogerce();
+           tablero->serpiente.encogerce();
             //game_over = true;
         break;
 
@@ -191,7 +221,14 @@ void Juego::on_key_pressed(int key)
         case KEY_QUIT:
             exit(0);
         break;
-        case 13:
+        case KEY_RESET:
+            if (!juego_corriendo) return;
+            reset();
+        break;
+        case KEY_SELECT:
+          reset();
+      break;
+        case KEY_START:
             if (pausado) return;
             start();
         break;

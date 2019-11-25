@@ -56,6 +56,27 @@ void Tablero::draw_axis()
     glEnd();
 }
 
+void Tablero::reset()
+{
+    obstaculos.clear();
+    camera_mode = 0;
+    serpiente.reset();
+    mover_item();
+    add_obstaculo();
+}
+
+void Tablero::draw_guide()
+{
+  Punto cab = serpiente.get_cabeza();
+  glLineWidth(10.0f);
+  glNormal3f(0.0, 1.0, 0.0);
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glBegin(GL_LINES);
+  glVertex3f(cab.x,cab.y+0.5,cab.z);
+  glVertex3f(item.x,item.y+0.5,item.z);
+  glEnd();
+}
+
 void Tablero::draw_paredes()
 {
     glLineWidth(1.0f);
@@ -84,7 +105,7 @@ void Tablero::draw_board()
 {
     enable_2D_texture();
     glPushMatrix();
-        //glBindTexture(GL_TEXTURE_2D, textures[GROUND_TEXTURE]);
+        glBindTexture(GL_TEXTURE_2D, textures[GROUND_TEXTURE]);
         glBegin(GL_POLYGON);
             //glColor3f(0.0f, 1.0f, 0.0f);
             glNormal3f(0.0, 1.0, 0.0);
@@ -98,6 +119,7 @@ void Tablero::draw_board()
             glVertex3f(-TABLERO_SIZE, 0.0f, -TABLERO_SIZE);
         glEnd();
 
+
         Punto p;
         float size = -TABLERO_SIZE - 0.1f;
         // Draw bordes. TODO: It's better use a rectangle.
@@ -108,28 +130,28 @@ void Tablero::draw_board()
             p.y = 0.125f;
             p.z = TABLERO_SIZE + 0.125;
             glColor3f(1.0f, 0.0f, 0.0f);
-            draw_cube(0.25f, p);
+            draw_cube(0.25f, p,BRICK_TEXTURE);
 
             glColor3i(1.0,0,0);
             p.x = -TABLERO_SIZE - 0.125;
             p.y = 0.125f;
             p.z = size;
             glColor3f(0.0f, 1.0f, 0.0f);
-            draw_cube(0.25f, p);
+            draw_cube(0.25f, p,BRICK_TEXTURE);
 
             glColor3i(1.0,0,0);
             p.x = TABLERO_SIZE + 0.125;
             p.y = 0.125f;
             p.z = -size;
             glColor3f(0.0f, 5.0f, 0.0f);
-            draw_cube(0.25f, p);
+            draw_cube(0.25f, p, BRICK_TEXTURE);
 
             glColor3i(1.0,0,0);
             p.x = -size;
             p.y = 0.125f;
             p.z = -TABLERO_SIZE - 0.125;
             glColor3f(0.0f, 0.0f, 1.0f);
-            draw_cube(0.25f, p);
+            draw_cube(0.25f, p, BRICK_TEXTURE);
 
             size += 0.25f;
         }
@@ -141,7 +163,7 @@ void Tablero::draw_board()
 void Tablero::draw_comida()
 {
     Punto p = item;
-    //draw_sphere(0.25f, p, item_TEXTURE);
+    //draw_sphere(0.25f, p, FOOD_TEXTURE);
 
     // "leaf"
     glPushMatrix();
@@ -167,13 +189,14 @@ void Tablero::draw_comida()
     enable_2D_texture();
 
     glPushMatrix();
-        //glBindTexture(GL_TEXTURE_2D, textures[item_TEXTURE]);
+        glBindTexture(GL_TEXTURE_2D, textures[FOOD_TEXTURE]);
         glTranslatef(p.x, p.y + m, p.z);
         glRotatef(a, 0.0, 1.0, 0.0);
-        glutSolidSphere(0.25f, 100.0f, 100.0f);
+        glut2SolidSphere(0.25f, 100.0f, 100.0f);
     glPopMatrix();
 
     disable_2D_texture();
+
 }
 
 void Tablero::draw_obstaculos()
@@ -181,7 +204,7 @@ void Tablero::draw_obstaculos()
     for (int i = 0; i < obstaculos.size(); ++i)
     {
         Punto p = obstaculos.at(i);
-        draw_cube(0.5f, p);
+        draw_cube(0.5f, p,BARRIER_TEXTURE);
     }
 }
 
@@ -191,6 +214,7 @@ void Tablero::draw_objects()
     draw_comida();
     draw_obstaculos();
     draw_axis();
+    draw_guide();
     serpiente.draw();
 }
 
@@ -231,7 +255,7 @@ void Tablero::cambiar_camara()
 {
     camera_mode += 1;
 
-    if (camera_mode > 4)
+    if (camera_mode > 1)
     {
         camera_mode = 0;
     }
@@ -248,7 +272,7 @@ void Tablero::set_camera()
     camara.aspect = 1;
   //  glRotatef(180,0.0,0.0,1.0);
 
-    if (camera_mode == 0)
+    if (camera_mode == 4)
     {
         camara.eyeX    = 0.0f;
         camara.eyeY    = 10.0f;
@@ -260,7 +284,7 @@ void Tablero::set_camera()
         camara.zNear   = 0.1f;
         camara.zFar    = 50;
     }
-    else if (camera_mode == 1)
+    else if (camera_mode == 3)
     {
         camara.eyeX    = 0.0f;
         camara.eyeY    = 1.0f;
@@ -272,7 +296,7 @@ void Tablero::set_camera()
         camara.zNear   = 0.1f;
         camara.zFar    = 50;
     }
-    else if (camera_mode == 4)
+    else if (camera_mode == 2)
     {
         #ifdef DEBUG
             camara.eyeX    = 0.0f;
@@ -296,7 +320,7 @@ void Tablero::set_camera()
             camara.zFar    = 50;
         #endif
     }
-    else if (camera_mode == 3)
+    else if (camera_mode == 1)
     {
         camara.eyeX    = 0.0f;
         camara.eyeY    = 45.0f;
@@ -310,7 +334,7 @@ void Tablero::set_camera()
 
     }
 
-    else if (camera_mode == 2)
+    else if (camera_mode == 0)
     {
 
         Punto cab = serpiente.get_cabeza();
@@ -338,8 +362,8 @@ void Tablero::set_camera()
         camara.eyeX    = cab.x;
         camara.eyeY    = cab.y;
         camara.eyeZ    = cab.z;
-        camara.centerY = 0.0f;
-        camara.fovy    = 30;
+        camara.centerY = 10.0f;
+        camara.fovy    = 50;
         camara.zNear   = 1.0f;
         camara.zFar    = 100;
         //glRotatef(-180,0.0,1.0,0.0);

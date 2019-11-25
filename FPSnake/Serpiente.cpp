@@ -10,6 +10,7 @@ Serpiente::Serpiente()
 
 void Serpiente::avanzar()
 {
+
     cuerpo.pop_back();
     crecer(false);
 }
@@ -56,7 +57,6 @@ void Serpiente::draw()
 {
 
     Punto h = cuerpo[0];
-
     glColor3f(1.0, 1.0, 0.6);
     glPushMatrix();
         glTranslatef(h.x, h.y, h.z);
@@ -64,7 +64,7 @@ void Serpiente::draw()
     glPopMatrix();
 
     enable_2D_texture();
-
+    glBindTexture(GL_TEXTURE_2D, textures[SNAKE_TEXTURE]);
 
 
     for (size_t i = 1; i < cuerpo.size(); ++i)
@@ -73,11 +73,27 @@ void Serpiente::draw()
 
         glPushMatrix();
             glTranslatef(p.x, p.y, p.z);
-            glutSolidCube(0.5f);
+            glut2SolidCube(0.5f);
         glPopMatrix();
     }
 
     disable_2D_texture();
+}
+
+void Serpiente::reset()
+{
+    cuerpo.clear();
+    int d = (rand() % 4) + 1;
+    cambiar_direccion(d);
+
+    Punto p;
+    p.x = 0.0f;
+    p.y = GROUND_DIFF;
+    p.z = 0.0f;
+
+    cuerpo.push_front(p);
+
+    crecer(false);
 }
 
 Punto Serpiente::get_cabeza()
@@ -117,7 +133,7 @@ void Serpiente::crecer(bool cola)
             p.x -= 0.5f;
         break;
         case RIGHT:
-    
+
             p.x += 0.5f;
         break;
     }
@@ -144,6 +160,33 @@ void Serpiente::encogerce()
       cuerpo.pop_back();
     }
   }
+
+  Punto p;
+  p.x = cuerpo[0].x;
+  p.y = cuerpo[0].y;
+  p.z = cuerpo[0].z;
+  switch (direccion)
+  {
+      case DOWN:
+
+          p.z -= 1.0f;
+          direccion = UP;
+      break;
+      case UP:
+          p.z += 1.0f;
+          direccion = DOWN;
+      break;
+      case LEFT:
+          p.x += 1.0f;
+          direccion = RIGHT;
+      break;
+      case RIGHT:
+          p.x -= 1.0f;
+          direccion = LEFT;
+      break;
+  }
+  cuerpo.pop_front();
+  cuerpo.push_front(p);
 
 }
 

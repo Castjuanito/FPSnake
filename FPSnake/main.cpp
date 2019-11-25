@@ -49,7 +49,7 @@ void init()
 #endif
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    //load_resources();
+    load_resources();
 
     juego = new Juego();
 }

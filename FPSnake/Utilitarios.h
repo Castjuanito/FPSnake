@@ -6,6 +6,7 @@
 #include <GL/glx.h>
 #include <GL/glut.h>
 
+#include "glut_shapes.h"
 #include <deque>
 #include <iostream>
 #include <stdlib.h>
@@ -34,8 +35,8 @@ using namespace std;
 #define KEY_CAMERA      32  // space
 #define KEY_PAUSE       112 // p
 #define KEY_QUIT        27  // esc
-//#define KEY_SELECT      13  // enter
-#define KEY_START       13 // s
+#define KEY_SELECT      13  // enter
+#define KEY_START       115 // s
 #define KEY_STOP        113 // q
 #define KEY_RESET       114 // r
 #define KEY_UP          GLUT_KEY_UP
@@ -47,6 +48,8 @@ struct Punto
 {
     float x, y, z;
 };
+
+GLuint textures[TEXTURE_COUNT];
 
 enum Objeto
 {
@@ -170,14 +173,14 @@ inline void disable_2D_texture()
     glDisable(GL_TEXTURE_2D);
 }
 
-inline void draw_cube(float size, Punto p)
+inline void draw_cube(float size, Punto p, int res_id)
 {
      enable_2D_texture();
 
     glPushMatrix();
-      //  glBindTexture(GL_TEXTURE_2D, textures[res_id]);
+        glBindTexture(GL_TEXTURE_2D, textures[res_id]);
         glTranslatef(p.x, p.y, p.z);
-        glutSolidCube(size);
+        glut2SolidCube(size);
     glPopMatrix();
 
     disable_2D_texture();
@@ -188,9 +191,10 @@ inline void draw_sphere(float size, Punto p, int res_id)
     enable_2D_texture();
 
     glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, textures[res_id]);
         glTranslatef(p.x, p.y, p.z);
 
-        glutSolidSphere(size, 100.0f, 100.0f);
+        glut2SolidSphere(size, 100.0f, 100.0f);
     glPopMatrix();
 
     disable_2D_texture();
@@ -211,6 +215,34 @@ inline void draw_text(string s, Punto p, float r, float g, float b)
     }
 
     glEnable(GL_LIGHTING);
+}
+
+inline void load_resources()
+{
+    glGenTextures(TEXTURE_COUNT, textures);
+
+    glBindTexture(GL_TEXTURE_2D, textures[GROUND_TEXTURE]);
+    load_image("./resources/grass.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[FOOD_TEXTURE]);
+    load_image("./resources/apple.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[BARRIER_TEXTURE]);
+    load_image("./resources/box.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[SNAKE_TEXTURE]);
+    load_image("./resources/snake.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[MENU_TEXTURE]);
+    load_image("./resources/menu.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[BRICK_TEXTURE]);
+    load_image("./resources/brick.png");
+}
+
+inline void unload_resources()
+{
+    glDeleteTextures(TEXTURE_COUNT, textures);
 }
 
 
